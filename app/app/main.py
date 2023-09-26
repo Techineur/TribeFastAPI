@@ -17,61 +17,25 @@ from redis import asyncio as aioredis
 from fastapi import BackgroundTasks
 from fastapi import Depends
 from fastapi import FastAPI
+from fastapi import HTTPException
 
-from app.config import Config
+from app.config import Settings
+from app.check import route as check_route
+from app.db.redisStore import route as redis_route
+
+
 
 
 
 log = logging.getLogger(__name__)
-config = Config()
+config = Settings()
 app = FastAPI(title=config.title)
+app.include_router(check_route)
+app.include_router(redis_route)
+
 redis = redis.from_url(config.redis_url, decode_responses=True)
 
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
 
-@app.get("/api/v1/health")
-async def health():
-    return {"status": "ok"}
-
-@app.get("/api/v1/redis")
-async def redis_health():
-    try:
-        redis.ping()
-        return {"status": "ok"}
-    except ResponseError:
-        return {"status": "error"}
-    
-@app.get("/api/v1/redis/keys")
-async def redis_keys():
-    try:
-        keys = redis.keys()
-        return {"keys": keys}
-    except ResponseError:
-        return {"status": "error"}
-    
-@app.get("/api/v1/redis/{key}")
-async def redis_get(key: str):
-    try:
-        value = redis.get(key)
-        return {"value": value}
-    except ResponseError:
-        return {"status": "error"}
-
-@app.post("/api/v1/redis/{key}")
-async def redis_set(key: str, value: str):
-    try:
-        redis.set(key, value)
-        return {"status": "ok"}
-    except ResponseError:
-        return {"status": "error"}
-    
-@app.delete("/api/v1/redis/{key}")
-async def redis_delete(key: str):
-    try:
-        redis.delete(key)
-        return {"status": "ok"}
-    except ResponseError:
-        return {"status": "error"}
-    
