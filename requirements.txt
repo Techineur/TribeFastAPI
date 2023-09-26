@@ -4,8 +4,9 @@ uvicorn
 passlib
 python-jose
 bcrypt
-aiomysql
+pymysql
 requests
 asgi-lifespan
 python-dateutil
 httpx
+sqlmodel
