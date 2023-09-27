@@ -20,9 +20,9 @@ from fastapi import FastAPI
 from fastapi import HTTPException
 
 from app.config import Settings
-from app.check import route as check_route
+from app.routes.check import route as check_route
 from app.db.redisStore import route as redis_route
-
+from app.db.dbConfig import create_db_and_tables
 
 
 
@@ -34,6 +34,8 @@ app.include_router(check_route)
 app.include_router(redis_route)
 
 redis = redis.from_url(config.redis_url, decode_responses=True)
+
+create_db_and_tables()
 
 @app.get("/")
 async def root():
