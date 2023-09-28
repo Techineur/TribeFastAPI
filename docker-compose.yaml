@@ -18,3 +18,17 @@ services:
         depends_on:
             - redis
         command: /start-reload.sh
+    db:
+        image: mysql/mysql-server:8.0.23
+        restart: always
+        environment:
+            MYSQL_DATABASE: 'db'
+            MYSQL_USER: 'tribe'
+            MYSQL_PASSWORD: 'tr1b3'
+            MYSQL_ROOT_PASSWORD: 'secretRoot'
+        ports:
+            - '3307:3306'
+        volumes:
+            - $PWD/var/lib/mysql
+        expose:
+            - 3306

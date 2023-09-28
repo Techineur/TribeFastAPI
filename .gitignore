@@ -140,3 +140,24 @@ cython_debug/
 # Redis data
 data/appendonly.aof
 data/dump.rdb
+
+# MySQL
+*.sql
+data/*.sql
+data/mysql/*
+data/performance_schema/*
+data/sys/*
+data/ib_logfile[0-9]*
+data/ibdata1
+data/tribe
+data/.my-*
+data/aria*
+data/ib_buffer_pool
+data/multi-master.info
+data/auto.cnf
+data/binlog.index
+data/mariadb_upgrade_info
+data/undo*
+
+
+
